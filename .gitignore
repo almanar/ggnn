@@ -1,1 +1,3 @@
-data/
+data/.DS_Store
+data/embed/
+data/embeddings.txt
