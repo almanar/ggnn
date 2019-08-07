@@ -58,7 +58,7 @@ def embed_token_list(dic, token_list):
 
 # split token into words according to camel case
 def word_split(token):
-    matches = re.finditer(str('.+?(?:(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|$)'), token)
+    matches = re.finditer('.+?(?:(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|$)', token.decode("utf-8"))
     return [m.group(0).lower() for m in matches]
 
 # embed a string, which may be a camel case
