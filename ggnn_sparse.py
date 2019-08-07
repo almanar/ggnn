@@ -354,8 +354,10 @@ def main():
     args = docopt(__doc__)
     try:
         model = GGNNSparse(args)
-        model.train()
-        #model.test()
+        if params['predict']:
+            model.test()
+        else:
+            model.train()
     except:
         typ, value, tb = sys.exc_info()
         traceback.print_exc()

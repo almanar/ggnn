@@ -55,6 +55,10 @@ class GGNN(object):
         if '--valid_file' in args and args['--valid_file'] is not None:
             params['valid_file'] = args['--valid_file']
         
+        params['predict'] = False
+        if '--predict' in args:
+            params['predict'] = True
+
         # if '--random_seed' in args and args['--random_seed'] is not None:
         #     params['random_seed'] = int(args['--random_seed'])
         
