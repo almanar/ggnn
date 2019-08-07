@@ -354,7 +354,7 @@ def main():
     args = docopt(__doc__)
     try:
         model = GGNNSparse(args)
-        if params['predict']:
+        if model.is_predict():
             model.test()
         else:
             model.train()

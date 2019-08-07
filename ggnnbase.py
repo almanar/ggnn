@@ -111,6 +111,9 @@ class GGNN(object):
             else:
                 self.initialize_model()
 
+    def is_predict(self):
+        return self.params['predict']
+
     def load_data(self, file_name, is_training_data: bool):
         full_path = os.path.join(self.data_dir, file_name)
 
