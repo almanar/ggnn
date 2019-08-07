@@ -36,6 +36,8 @@ class GGNN(object):
             'train_file': 'train_set_small.json',
             'valid_file': 'test_set_small.json',
             'timeout': 24*60*60
+
+            'predict': False
         }
 
     def __init__(self, args):
@@ -55,7 +57,6 @@ class GGNN(object):
         if '--valid_file' in args and args['--valid_file'] is not None:
             params['valid_file'] = args['--valid_file']
         
-        params['predict'] = False
         if '--predict' in args:
             params['predict'] = True
 
