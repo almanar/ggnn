@@ -52,19 +52,19 @@ def maybe_download(filename, expected_bytes):
   return local_filename
 
 
-#filename = maybe_download('text8.zip', 31344016)
+filename = maybe_download('text8.zip', 31344016)
 #filename = 'data/extraction/android-all.txt'
-filename = 'data/extraction/owasp-all.txt'
+#filename = 'data/extraction/owasp-all.txt'
 
 
 # Read the data into a list of strings.
 def read_data(filename):
   """Extract the first file enclosed in a zip file as a list of words."""
-  # with zipfile.ZipFile(filename) as f:
-  #   data = tf.compat.as_str(f.read(f.namelist()[0])).split()
+  with zipfile.ZipFile(filename) as f:
+    data = tf.compat.as_str(f.read(f.namelist()[0])).split()
 
-  with open(filename) as f:
-    data = f.read().replace('\n', ' ').split()
+  # with open(filename) as f:
+  #   data = f.read().replace('\n', ' ').split()
   return data
 
 
