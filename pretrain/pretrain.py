@@ -294,7 +294,7 @@ with tf.Session(graph=graph) as session:
 
   print(final_embeddings.shape)
   # Write corresponding labels for the embeddings.
-  with open('data/extraction/owasp-embeddings2.txt', 'w') as f:
+  with open('embeddings.txt', 'w') as f:
     for i in xrange(vocabulary_size):
       f.write(reverse_dictionary[i] + '\t' + (' '.join(str(x) for x in final_embeddings[i])) + '\n')
     f.close()
