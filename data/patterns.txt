@@ -1,49 +1,49 @@
 ## Replace
-APIReplacement/CreateStatement "java.sql.Connection.createStatement()::java.sql.Connection.prepareStatement(java.lang.String)"
-APIReplacement/FileGetPath "java.io.File.getPath()::java.io.File.getAbsolutePath()""
-APIReplacement/MathRandom "java.lang.Math.random()::java.util.Random.nextDouble()"
-APIReplacement/PrepareSetDate "java.sql.PreparedStatement.setDate(int,java.sql.Date)::java.sql.PreparedStatement.setTimestamp(int,java.sql.Timestamp)"
-APIReplacement/StrEqToObjEq "java.lang.String.equals(java.lang.String)::java.util.Objects.equals(java.lang.String,java.lang.String)"
-APIReplacement/DateGetTime "java.util.Date.getTime()::java.lang.System.currentTimeMillis()"
-APIReplacement/FileWriterClose "java.io.FileWriter.close()::java.io.BufferedWriter.close()"
-APIReplacement/Mkdir "java.io.File.mkdir()::java.io.File.mkdirs()"
-APIReplacement/ScannerNextInt "java.util.Scanner.nextInt()::java.util.Scanner.next()"
-APIReplacement/replaceAll "java.lang.String.replaceAll(java.lang.String,java.lang.String)::java.lang.String.replace(java.lang.String,java.lang.String)"
+APIReplacement/CreateStatement java.sql.Connection.createStatement()::java.sql.Connection.prepareStatement(java.lang.String)
+APIReplacement/FileGetPath java.io.File.getPath()::java.io.File.getAbsolutePath()
+APIReplacement/MathRandom java.lang.Math.random()::java.util.Random.nextDouble()
+APIReplacement/PrepareSetDate java.sql.PreparedStatement.setDate(int,java.sql.Date)::java.sql.PreparedStatement.setTimestamp(int,java.sql.Timestamp)
+APIReplacement/StrEqToObjEq java.lang.String.equals(java.lang.String)::java.util.Objects.equals(java.lang.String,java.lang.String)
+APIReplacement/DateGetTime java.util.Date.getTime()::java.lang.System.currentTimeMillis()
+APIReplacement/FileWriterClose java.io.FileWriter.close()::java.io.BufferedWriter.close()
+APIReplacement/Mkdir java.io.File.mkdir()::java.io.File.mkdirs()
+APIReplacement/ScannerNextInt java.util.Scanner.nextInt()::java.util.Scanner.next()
+APIReplacement/replaceAll java.lang.String.replaceAll(java.lang.String,java.lang.String)::java.lang.String.replace(java.lang.String,java.lang.String)
 
 
 ## Insert API
-InsertAPI/ConcurrentCountDown "null::java.util.concurrent.CountDownLatch.countDown()"
-InsertAPI/ConnectionCommit "null::java.sql.Connection.commit()"
-InsertAPI/PrintWriterFlush "null::java.io.PrintWriter.flush()"
-InsertAPI/ResultSetClose "null::java.sql.ResultSet.close()"
-InsertAPI/executeUpdate "null::java.sql.PreparedStatement.executeUpdate()"
-InsertAPI/ConcurrentUnlock "null::java.util.concurrent.locks.Lock.unlock()"
-InsertAPI/FieldSetAccessible "null::java.lang.reflect.Field.setAccessible(boolean)"
-InsertAPI/ProcessWaitFor "null::java.lang.Process.waitFor()"
-InsertAPI/ThreadSleep "null::java.lang.Thread.sleep(int)"
-InsertAPI/shutdown "null::java.util.concurrent.ExecutorService.shutdown()"
+InsertAPI/ConcurrentCountDown null::java.util.concurrent.CountDownLatch.countDown()
+InsertAPI/ConnectionCommit null::java.sql.Connection.commit()
+InsertAPI/PrintWriterFlush null::java.io.PrintWriter.flush()
+InsertAPI/ResultSetClose null::java.sql.ResultSet.close()
+InsertAPI/executeUpdate null::java.sql.PreparedStatement.executeUpdate()
+InsertAPI/ConcurrentUnlock null::java.util.concurrent.locks.Lock.unlock()
+InsertAPI/FieldSetAccessible null::java.lang.reflect.Field.setAccessible(boolean)
+InsertAPI/ProcessWaitFor null::java.lang.Process.waitFor()
+InsertAPI/ThreadSleep null::java.lang.Thread.sleep(int)
+InsertAPI/shutdown null::java.util.concurrent.ExecutorService.shutdown()
 
 ## Insert conditions
-InsertCond/CreateNewFiles "java.io.File.createNewFile()" True
-InsertCond/JSONgetString "org.json.JSONObject.getString(java.lang.String)" True
-InsertCond/ResultSetGetInt "java.sql.ResultSet.getInt(java.lang.String)" True
-InsertCond/StringCharAt "java.lang.String.charAt(int)" True
-InsertCond/executeQuery "java.sql.Statement.executeQuery(java.lang.String)" True
-InsertCond/JSONArrayGetObject "org.json.JSONArray.getJSONObject(int)" True
-InsertCond/MapGet "java.util.Map<java.lang.String,java.lang.String>.get(java.lang.String)" True
-InsertCond/ScannerNext "java.util.Scanner.next()" True
-InsertCond/StringsubString "java.lang.String.substring(int,int)" True
-InsertCond/listFiles "java.io.File.listFiles()" True
+InsertCond/CreateNewFiles java.io.File.createNewFile() True
+InsertCond/JSONgetString org.json.JSONObject.getString(java.lang.String) True
+InsertCond/ResultSetGetInt java.sql.ResultSet.getInt(java.lang.String) True
+InsertCond/StringCharAt java.lang.String.charAt(int) True
+InsertCond/executeQuery java.sql.Statement.executeQuery(java.lang.String) True
+InsertCond/JSONArrayGetObject org.json.JSONArray.getJSONObject(int) True
+InsertCond/MapGet java.util.Map<java.lang.String,java.lang.String>.get(java.lang.String) True
+InsertCond/ScannerNext java.util.Scanner.next() True
+InsertCond/StringsubString java.lang.String.substring(int,int) True
+InsertCond/listFiles java.io.File.listFiles() True
 
 
 ### Insert try-catch
-InsertException/ClassForName "java.lang.Class.forName(java.lang.String)" True
-InsertException/ScannerNextInt "java.util.Scanner.nextInt()" True
-InsertException/ThreadSleep "java.lang.Thread.sleep(int)" True
-InsertException/URLOpenConn "java.net.URL.openConnection()" True
-InsertException/getCanonicalPath "java.io.File.getCanonicalPath()" True
-InsertException/DoubleValueOf "java.lang.Double.valueOf(java.lang.String)" True
-InsertException/StringFormat "java.lang.String.format(java.lang.String,java.lang.String,java.lang.String)" True
-InsertException/URLDecode "java.net.URLDecoder.decode(java.lang.String,java.lang.String)" True
-InsertException/UUIDFromString "java.util.UUID.fromString(java.lang.String)" True
-InsertException/parseLong "java.lang.Long.parseLong(java.lang.String)" True
+InsertException/ClassForName java.lang.Class.forName(java.lang.String) True
+InsertException/ScannerNextInt java.util.Scanner.nextInt() True
+InsertException/ThreadSleep java.lang.Thread.sleep(int) True
+InsertException/URLOpenConn java.net.URL.openConnection() True
+InsertException/getCanonicalPath java.io.File.getCanonicalPath() True
+InsertException/DoubleValueOf java.lang.Double.valueOf(java.lang.String) True
+InsertException/StringFormat java.lang.String.format(java.lang.String,java.lang.String,java.lang.String) True
+InsertException/URLDecode java.net.URLDecoder.decode(java.lang.String,java.lang.String) True
+InsertException/UUIDFromString java.util.UUID.fromString(java.lang.String) True
+InsertException/parseLong java.lang.Long.parseLong(java.lang.String) True
