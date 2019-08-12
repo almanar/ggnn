@@ -61,12 +61,13 @@ class GGNN(object):
             params['predict'] = True
 
         log_sub_path = params['train_file'].replace('train_', '').replace('.json', '')
-
         # if '--random_seed' in args and args['--random_seed'] is not None:
         #     params['random_seed'] = int(args['--random_seed'])
         
         self.run_id = "_".join([params['train_file'], time.strftime("%Y-%m-%d-%H-%M-%S")])
         log_dir = args.get('--log_dir') or 'logs/{}'.format(log_sub_path)
+        if not os.path.exists(log_dir):
+            os.mkdir(log_dir)
         self.log_file = os.path.join(log_dir, "%s_log.json" % self.run_id)
         self.best_model_file = os.path.join(log_dir, "%s_model_best.pickle" % self.run_id)
         self.online_data_backup_file = os.path.join(log_dir, "%s_result.txt" % self.run_id)
