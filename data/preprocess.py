@@ -12,7 +12,7 @@ from random import sample
 
 # filter patterns with given pattern
 # this is only used for API replace
-def filter(feature_file_name, pattern):
+def filter(feature_file_name, pattern, bodyAPI):
     filtered = []
     print(feature_file_name)
     csv.field_size_limit(sys.maxsize)
@@ -25,12 +25,16 @@ def filter(feature_file_name, pattern):
             # seq = row[0] # json string for gnn tokens
             # tags = set(row[1].split(',')) # separated with ',' when there are more than one
             repAPI = row[2] # with the form of API1::API2
-            # retAPI = set(row[3].split(',')) # separated with ',' when there are more than one
-            # bodyAPI = row[4] # separated with ',' when there are more than one
+            retAPI = set(row[3].split(',')) # separated with ',' when there are more than one
+            bodyAPI = row[4] # separated with ',' when there are more than one
             # fname = row[5] # absolute file name of the pattern
             # line = int(row[6]) # line number
-            if repAPI == pattern:
-                filtered.append(row)
+            if not bodyAPI:
+                if repAPI == pattern:
+                    filtered.append(row)
+            else:
+                if pattern in retAPI or pattern in bodyAPI:
+                    filtered.append(row)
     return filtered
 
 # load pre-trained word embedding
@@ -129,17 +133,21 @@ if __name__ == '__main__' :
         correct_files = ['11-17correct.txt', '1811-12correct.txt', '18correct.txt']
         wrong_files = ['11-17wrong.txt', '1811-12wrong.txt', '18wrong.txt']
 
+        body_api = False
+        if len(sys.argv) >= 4:
+            body_api = sys.argv[3]
+
         converted_string = []
         
         for f in correct_files:
-            filtered = filter(os.path.join(path, f), pattern)
+            filtered = filter(os.path.join(path, f), pattern, body_api)
             converted = embedding(filtered)
             converted_string.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
         
         count_correct = len(converted_string)
 
         for f in wrong_files:
-            filtered = filter(os.path.join(path, f), pattern)
+            filtered = filter(os.path.join(path, f), pattern, body_api)
             converted = embedding(filtered)
             converted_string.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
         
