@@ -139,9 +139,9 @@ if __name__ == '__main__' :
             valid, train = split_list(train_valid)
             with open(os.path.join(top_path, 'train_{}_{}.json'.format(api, i)), 'w') as f:
                 f.write('[{}]'.format(','.join(train)))
-            with open(os.path.join(top_path, 'valid_{}_{}.json'.format(api, i))), 'w') as f:
+            with open(os.path.join(top_path, 'valid_{}_{}.json'.format(api, i)), 'w') as f:
                 f.write('[{}]'.format(','.join(valid)))
-            with open(os.path.join(top_path, 'test_{}_{}.json'.format(api, i))), 'w') as f:
+            with open(os.path.join(top_path, 'test_{}_{}.json'.format(api, i)), 'w') as f:
                 f.write('[{}]'.format(','.join(test)))
     else :
         print('Argument error!')
