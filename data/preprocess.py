@@ -181,7 +181,7 @@ if __name__ == '__main__' :
                     api = args[0].replace('/', '_')
                     path = top_path + '/FixRuleMiner'
                     body_api = False
-                    if len(sargs) >= 3:
+                    if len(args) >= 3:
                         body_api = args[2]
 
                     process(path, api, patterns, body_api)
