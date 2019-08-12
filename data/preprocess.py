@@ -156,7 +156,7 @@ if __name__ == '__main__' :
                 f.write('[{}]'.format(','.join(test)))
 
         with open("data_log.txt", "a") as f:
-            f.write("%s\t%s\t%d\t%d\n" % time.strftime("%Y-%m-%d-%H-%M-%S"), api, count_correct, count_wrong)
+            f.write('{}\t{}\t{}\t{}\n'.format(time.strftime("%Y-%m-%d-%H-%M-%S"), api, count_correct, count_wrong))
     else :
         print('Argument error!')
 
