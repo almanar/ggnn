@@ -67,6 +67,7 @@ class GGNN(object):
         log_dir = args.get('--log_dir') or 'logs/'
         self.log_file = os.path.join(log_dir, "%s_log.json" % self.run_id)
         self.best_model_file = os.path.join(log_dir, "%s_model_best.pickle" % self.run_id)
+        self.online_data_backup_file = os.path.join(log_dir, "%s_result.txt" % self.run_id)
 
         config_file = args.get('--config-file')
         if config_file is not None:
@@ -268,6 +269,21 @@ class GGNN(object):
         log_to_save = []
         total_time_start = time.time()
         summ_line = '%d\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f'
+        
+        bak_train_loss = 0
+        bak_train_accs = 0
+        bak_train_precision = 0
+        bak_train_recall = 0
+        bak_train_f1 = 0
+        bak_train_speed = 0
+
+        bak_valid_loss = 0
+        bak_valid_accs = 0
+        bak_valid_precision = 0
+        bak_valid_recall = 0
+        bak_valid_f1 = 0
+        bak_valid_speed = 0
+        bak_epoch = 0
         with self.graph.as_default():
             if self.args.get('--restore') is not None:
                 _, valid_accs, _, _ = self.run_epoch("Resumed (validation)", self.valid_data, False)
@@ -283,6 +299,10 @@ class GGNN(object):
                 print(summ_line%(epoch, self.params['train_file'], train_loss, train_accs, train_precision, train_recall, train_f1, train_speed, epoch_time))
                 print(summ_line%(epoch, self.params['valid_file'], valid_loss, valid_accs, valid_precision, valid_recall, valid_f1, valid_speed, epoch_time))
 
+                bak_epoch = epoch
+                bak_train_loss, bak_train_accs, bak_train_precision, bak_train_recall, bak_train_f1, bak_train_speed = train_loss, train_accs, train_precision, train_recall, train_f1, train_speed
+                bak_valid_loss, bak_valid_accs, bak_valid_precision, bak_valid_recall, bak_valid_f1, bak_valid_speed = valid_loss, valid_accs, valid_precision, valid_recall, valid_f1, valid_speed
+
                 val_acc = np.sum(valid_accs)  # type: float
                 if val_acc > best_val_acc:
                     self.save_model(self.best_model_file)
@@ -296,6 +316,9 @@ class GGNN(object):
                 if  self.params['timeout'] < epoch_time:
                     print("Stopping training after %i epochs timeout." % epoch)
                     break
+        with open(self.online_data_backup_file, "w") as f:
+            f.write(summ_line%(bak_epoch, self.params['train_file'], bak_train_loss, bak_train_accs, bak_train_precision, bak_train_recall, bak_train_f1, bak_train_speed, 0))
+            f.write(summ_line%(bak_epoch, self.params['valid_file'], bak_valid_loss, bak_valid_accs, bak_valid_precision, bak_valid_recall, bak_valid_f1, bak_valid_speed, 0))
 
     def test(self):
         with self.graph.as_default():

@@ -122,6 +122,7 @@ if __name__ == '__main__' :
         # pattern = 'java.util.Date.getTime()::java.lang.System.currentTimeMillis()'
         pattern = sys.argv[2]
         top_path = './embed/' + sys.argv[1]
+        api = sys.argv[1].replace('/', '_')
         path = top_path + '/FixRuleMiner'
         # files = ['correct.txt', 'wrong.txt']
         files = ['11-17correct.txt', '1811-12correct.txt', '18correct.txt', '11-17wrong.txt', '1811-12wrong.txt', '18wrong.txt']
@@ -136,10 +137,12 @@ if __name__ == '__main__' :
         for i in range(5):
             test, train_valid = split_list(converted_string)
             valid, train = split_list(train_valid)
-            with open(os.path.join(top_path, 'train_{}.json'.format(i)), 'w') as f:
+            with open(os.path.join(top_path, 'train_{}_{}.json'.format(api, i)), 'w') as f:
                 f.write('[{}]'.format(','.join(train)))
-            with open(os.path.join(top_path, 'valid_{}.json'.format(i)), 'w') as f:
+            with open(os.path.join(top_path, 'valid_{}_{}.json'.format(api, i))), 'w') as f:
                 f.write('[{}]'.format(','.join(valid)))
-            with open(os.path.join(top_path, 'test_{}.json'.format(i)), 'w') as f:
+            with open(os.path.join(top_path, 'test_{}_{}.json'.format(api, i))), 'w') as f:
                 f.write('[{}]'.format(','.join(test)))
+    else :
+        print('Argument error!')
 
