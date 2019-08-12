@@ -122,6 +122,42 @@ def split_list(a_list):
     cut = len(a_list)//5
     return a_list[:cut], a_list[cut:]
 
+
+def process(path, api, pattern, body_api):
+    # files = ['correct.txt', 'wrong.txt']
+    correct_files = ['11-17correct.txt', '1811-12correct.txt', '18correct.txt']
+    wrong_files = ['11-17wrong.txt', '1811-12wrong.txt', '18wrong.txt']
+
+    converted_string = []
+    
+    for f in correct_files:
+        filtered = filter(os.path.join(path, f), pattern, body_api)
+        converted = embedding(filtered)
+        converted_string.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
+    
+    count_correct = len(converted_string)
+
+    for f in wrong_files:
+        filtered = filter(os.path.join(path, f), pattern, body_api)
+        converted = embedding(filtered)
+        converted_string.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
+    
+    count_wrong = len(converted_string) - count_correct
+
+    for i in range(5):
+        test, train_valid = split_list(converted_string)
+        valid, train = split_list(train_valid)
+        with open(os.path.join(top_path, 'train_{}_{}.json'.format(api, i)), 'w') as f:
+            f.write('[{}]'.format(','.join(train)))
+        with open(os.path.join(top_path, 'valid_{}_{}.json'.format(api, i)), 'w') as f:
+            f.write('[{}]'.format(','.join(valid)))
+        with open(os.path.join(top_path, 'test_{}_{}.json'.format(api, i)), 'w') as f:
+            f.write('[{}]'.format(','.join(test)))
+
+    with open("data_log.txt", "a") as f:
+        f.write('{}\t{}\t{}\t{}\n'.format(time.strftime("%Y-%m-%d-%H-%M-%S"), api, count_correct, count_wrong))
+
+
 if __name__ == '__main__' :
     if len(sys.argv) > 2:
         # pattern = 'java.util.Date.getTime()::java.lang.System.currentTimeMillis()'
@@ -129,42 +165,23 @@ if __name__ == '__main__' :
         top_path = './embed/' + sys.argv[1]
         api = sys.argv[1].replace('/', '_')
         path = top_path + '/FixRuleMiner'
-        # files = ['correct.txt', 'wrong.txt']
-        correct_files = ['11-17correct.txt', '1811-12correct.txt', '18correct.txt']
-        wrong_files = ['11-17wrong.txt', '1811-12wrong.txt', '18wrong.txt']
-
         body_api = False
         if len(sys.argv) >= 4:
             body_api = sys.argv[3]
 
-        converted_string = []
-        
-        for f in correct_files:
-            filtered = filter(os.path.join(path, f), pattern, body_api)
-            converted = embedding(filtered)
-            converted_string.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
-        
-        count_correct = len(converted_string)
-
-        for f in wrong_files:
-            filtered = filter(os.path.join(path, f), pattern, body_api)
-            converted = embedding(filtered)
-            converted_string.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
-        
-        count_wrong = len(converted_string) - count_correct
-
-        for i in range(5):
-            test, train_valid = split_list(converted_string)
-            valid, train = split_list(train_valid)
-            with open(os.path.join(top_path, 'train_{}_{}.json'.format(api, i)), 'w') as f:
-                f.write('[{}]'.format(','.join(train)))
-            with open(os.path.join(top_path, 'valid_{}_{}.json'.format(api, i)), 'w') as f:
-                f.write('[{}]'.format(','.join(valid)))
-            with open(os.path.join(top_path, 'test_{}_{}.json'.format(api, i)), 'w') as f:
-                f.write('[{}]'.format(','.join(test)))
-
-        with open("data_log.txt", "a") as f:
-            f.write('{}\t{}\t{}\t{}\n'.format(time.strftime("%Y-%m-%d-%H-%M-%S"), api, count_correct, count_wrong))
+        process(path, api, patterns, body_api)
     else :
-        print('Argument error!')
+        with open("patterns.txt", "r") as f:
+            for line in f.readlines():
+                line = line.rstrip()
+                if len(line) != 0 and not line.startswith("#"):
+                    args = line.split()
+                    pattern = args[2]
+                    top_path = './embed/' + args[1]
+                    api = sargs[1].replace('/', '_')
+                    path = top_path + '/FixRuleMiner'
+                    body_api = False
+                    if len(sargs) >= 4:
+                        body_api = args[3]
 
+                    process(path, api, patterns, body_api)
