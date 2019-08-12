@@ -5,6 +5,7 @@ import csv
 import json
 import ast
 import re
+import time
 from operator import add
 from random import shuffle
 from random import sample
@@ -125,15 +126,25 @@ if __name__ == '__main__' :
         api = sys.argv[1].replace('/', '_')
         path = top_path + '/FixRuleMiner'
         # files = ['correct.txt', 'wrong.txt']
-        files = ['11-17correct.txt', '1811-12correct.txt', '18correct.txt', '11-17wrong.txt', '1811-12wrong.txt', '18wrong.txt']
-        
-        converted_string = []
+        correct_files = ['11-17correct.txt', '1811-12correct.txt', '18correct.txt']
+        wrong_files = ['11-17wrong.txt', '1811-12wrong.txt', '18wrong.txt']
 
-        for f in files:
+        converted_string = []
+        
+        for f in correct_files:
             filtered = filter(os.path.join(path, f), pattern)
             converted = embedding(filtered)
             converted_string.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
         
+        count_correct = len(converted_string)
+
+        for f in wrong_files:
+            filtered = filter(os.path.join(path, f), pattern)
+            converted = embedding(filtered)
+            converted_string.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
+        
+        count_wrong = len(converted_string) - count_correct
+
         for i in range(5):
             test, train_valid = split_list(converted_string)
             valid, train = split_list(train_valid)
@@ -143,6 +154,9 @@ if __name__ == '__main__' :
                 f.write('[{}]'.format(','.join(valid)))
             with open(os.path.join(top_path, 'test_{}_{}.json'.format(api, i)), 'w') as f:
                 f.write('[{}]'.format(','.join(test)))
+
+        with open("data_log.txt", "a") as f:
+            f.write("%s\t%s\t%d\t%d\n" % time.strftime("%Y-%m-%d-%H-%M-%S"), api, count_correct, count_wrong)
     else :
         print('Argument error!')
 

@@ -317,8 +317,9 @@ class GGNN(object):
                     print("Stopping training after %i epochs timeout." % epoch)
                     break
         with open(self.online_data_backup_file, "w") as f:
-            f.write(summ_line%(bak_epoch, self.params['train_file'], bak_train_loss, bak_train_accs, bak_train_precision, bak_train_recall, bak_train_f1, bak_train_speed, 0))
-            f.write(summ_line%(bak_epoch, self.params['valid_file'], bak_valid_loss, bak_valid_accs, bak_valid_precision, bak_valid_recall, bak_valid_f1, bak_valid_speed, 0))
+            f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\tepoch_time\n")
+            f.write(summ_line + "\n" % (bak_epoch, self.params['train_file'], bak_train_loss, bak_train_accs, bak_train_precision, bak_train_recall, bak_train_f1, bak_train_speed, 0))
+            f.write(summ_line + "\n" % (bak_epoch, self.params['valid_file'], bak_valid_loss, bak_valid_accs, bak_valid_precision, bak_valid_recall, bak_valid_f1, bak_valid_speed, 0))
 
     def test(self):
         with self.graph.as_default():
