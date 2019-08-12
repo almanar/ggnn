@@ -176,12 +176,12 @@ if __name__ == '__main__' :
                 line = line.rstrip()
                 if len(line) != 0 and not line.startswith("#"):
                     args = line.split()
-                    pattern = args[2]
-                    top_path = './embed/' + args[1]
-                    api = sargs[1].replace('/', '_')
+                    pattern = args[1]
+                    top_path = './embed/' + args[0]
+                    api = args[0].replace('/', '_')
                     path = top_path + '/FixRuleMiner'
                     body_api = False
-                    if len(sargs) >= 4:
-                        body_api = args[3]
+                    if len(sargs) >= 3:
+                        body_api = args[2]
 
                     process(path, api, patterns, body_api)
