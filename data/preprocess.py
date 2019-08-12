@@ -169,7 +169,7 @@ if __name__ == '__main__' :
         if len(sys.argv) >= 4:
             body_api = sys.argv[3]
 
-        process(path, api, patterns, body_api)
+        process(path, api, pattern, body_api)
     else :
         with open("patterns.txt", "r") as f:
             for line in f.readlines():
@@ -184,4 +184,4 @@ if __name__ == '__main__' :
                     if len(args) >= 3:
                         body_api = args[2]
 
-                    process(path, api, patterns, body_api)
+                    process(path, api, pattern, body_api)
