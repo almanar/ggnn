@@ -12,7 +12,7 @@ from random import sample
 
 # filter patterns with given pattern
 # this is only used for API replace
-def filter(feature_file_name, pattern, bodyAPI):
+def filter(feature_file_name, pattern, body_API):
     filtered = []
     print(feature_file_name)
     csv.field_size_limit(sys.maxsize)
@@ -29,7 +29,7 @@ def filter(feature_file_name, pattern, bodyAPI):
             bodyAPI = row[4] # separated with ',' when there are more than one
             # fname = row[5] # absolute file name of the pattern
             # line = int(row[6]) # line number
-            if not bodyAPI:
+            if not body_API:
                 if repAPI == pattern:
                     filtered.append(row)
             else:
