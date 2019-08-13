@@ -30,7 +30,7 @@ InsertCond/ResultSetGetInt java.sql.ResultSet.getInt(java.lang.String) True
 InsertCond/StringCharAt java.lang.String.charAt(int) True
 InsertCond/executeQuery java.sql.Statement.executeQuery(java.lang.String) True
 InsertCond/JSONArrayGetObject org.json.JSONArray.getJSONObject(int) True
-InsertCond/MapGet java.util.Map<java.lang.String,java.lang.String>.get(java.lang.String) True
+InsertCond/MapGet java.util.Map<java.lang.String, java.lang.String>.get(java.lang.String) True
 InsertCond/ScannerNext java.util.Scanner.next() True
 InsertCond/StringsubString java.lang.String.substring(int,int) True
 InsertCond/listFiles java.io.File.listFiles() True
