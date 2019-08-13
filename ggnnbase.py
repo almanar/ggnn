@@ -64,7 +64,8 @@ class GGNN(object):
         # if '--random_seed' in args and args['--random_seed'] is not None:
         #     params['random_seed'] = int(args['--random_seed'])
         
-        self.run_id = "_".join([params['train_file'], time.strftime("%Y-%m-%d-%H-%M-%S")])
+        # self.run_id = "_".join([params['train_file'], time.strftime("%Y-%m-%d-%H-%M-%S")])
+        self.run_id = params['train_file']
         log_dir = args.get('--log_dir') or 'logs/{}'.format(log_sub_path)
         if not os.path.exists(log_dir):
             os.mkdir(log_dir)
@@ -320,9 +321,9 @@ class GGNN(object):
                     print("Stopping training after %i epochs timeout." % epoch)
                     break
         with open(self.online_data_backup_file, "w") as f:
-            f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\tepoch_time\n")
-            f.write(summ_line + "\n" % (bak_epoch, self.params['train_file'], bak_train_loss, bak_train_accs, bak_train_precision, bak_train_recall, bak_train_f1, bak_train_speed, 0))
-            f.write(summ_line + "\n" % (bak_epoch, self.params['valid_file'], bak_valid_loss, bak_valid_accs, bak_valid_precision, bak_valid_recall, bak_valid_f1, bak_valid_speed, 0))
+            f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n")
+            f.write("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(bak_epoch, self.params['train_file'], bak_train_loss, bak_train_accs, bak_train_precision, bak_train_recall, bak_train_f1, bak_train_speed))
+            f.write("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(bak_epoch, self.params['valid_file'], bak_valid_loss, bak_valid_accs, bak_valid_precision, bak_valid_recall, bak_valid_f1, bak_valid_speed))
 
     def test(self):
         with self.graph.as_default():
