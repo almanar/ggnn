@@ -7,7 +7,7 @@ import sys
 import csv
 
 # train_APIReplacement_Mkdir_0.json_result_valid.txt
-keys = ['loss', 'acc', 'prec', 'recall', 'f1', 'speed']
+keys = ['acc', 'prec', 'recall', 'f1']
 
 def parse(f, dic):
 	with open(f, 'r') as f:
@@ -16,8 +16,7 @@ def parse(f, dic):
 		for row in csv_reader:
 			epoch = int(row[0])
 			# fname = row[1]
-			loss = float(row[2])
-			append(dic['loss'], epoch, loss)
+			# loss = float(row[2])
 
 			accs = float(row[3])
 			append(dic['acc'], epoch, accs)
@@ -68,5 +67,5 @@ if __name__ == '__main__':
 		with open(os.path.join(base, 'best.txt'), 'w') as f:
 			for key in keys:
 				best, epoch = compute_best(dic, key)
-				f.write("Best {} : {}\tEpoch ; {}".format(key, best, epoch))
+				f.write("Best {} : {}\tEpoch ; {}\n".format(key, best, epoch))
 		
