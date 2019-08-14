@@ -3,6 +3,7 @@
 
 import io
 import os
+import sys
 import csv
 
 # train_APIReplacement_Mkdir_0.json_result_valid.txt
@@ -57,5 +58,5 @@ if __name__ == '__main__':
 		for i in range(5):
 			f = os.path.join(base, 'train_{}_{}.json_result_valid.txt'.format(api, i))
 			parse(f, dic)
-	for key, value in dic['acc']:
-		print(key, value)
+		for key, value in dic['acc'].items():
+			print(key, value)
