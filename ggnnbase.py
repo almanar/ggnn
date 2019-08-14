@@ -61,7 +61,7 @@ class GGNN(object):
         if '--predict' in args:
             params['predict'] = True
 
-        log_sub_path = re.sub(r'_\d+.json', '', params['train_file'].replace('train_', ''))
+        log_sub_path = re.sub(r'_\d+', '', params['train_file'].replace('train_', '').replace('.json', ''))
         # if '--random_seed' in args and args['--random_seed'] is not None:
         #     params['random_seed'] = int(args['--random_seed'])
         
