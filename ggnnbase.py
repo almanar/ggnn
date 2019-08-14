@@ -19,7 +19,7 @@ class GGNN(object):
     @classmethod
     def default_params(cls):
         return {
-            'num_epochs': 300,#3000,
+            'num_epochs': 200,#3000,
             'patience': 100,
             'learning_rate': 0.001,
             'clamp_gradient_norm': 1.0,
@@ -295,14 +295,13 @@ class GGNN(object):
                 bak_train_data.append([epoch, self.params['train_file'], train_loss, np.sum(train_accs), np.sum(train_precision), np.sum(train_recall), np.sum(train_f1), train_speed])
                 bak_valid_data.append([epoch, self.params['valid_file'], valid_loss, np.sum(valid_accs), np.sum(valid_precision), np.sum(valid_recall), np.sum(valid_f1), valid_speed])
 
-                if is_test:
-                    break
-                val_acc = np.sum(valid_accs)  # type: float
-                if val_acc > best_val_acc:
-                    self.save_model(self.best_model_file)
-                    print("(Best epoch so far, cum. val. acc increased to %.5f from %.5f. Saving to '%s')" % (val_acc, best_val_acc, self.best_model_file))
-                    best_val_acc = val_acc
-                    best_val_acc_epoch = epoch
+                if not is_test:
+                    val_acc = np.sum(valid_accs)  # type: float
+                    if val_acc > best_val_acc:
+                        self.save_model(self.best_model_file)
+                        print("(Best epoch so far, cum. val. acc increased to %.5f from %.5f. Saving to '%s')" % (val_acc, best_val_acc, self.best_model_file))
+                        best_val_acc = val_acc
+                        best_val_acc_epoch = epoch
                 # elif epoch - best_val_acc_epoch >= self.params['patience']:
                 #     print("Stopping training after %i epochs without improvement on validation accuracy." % self.params['patience'])
                 #     break
