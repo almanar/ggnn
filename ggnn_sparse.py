@@ -349,15 +349,14 @@ class GGNNSparse(GGNN):
 
             yield batch_feed_dict
 
-
 def main():
     args = docopt(__doc__)
     try:
         model = GGNNSparse(args)
         if model.is_predict():
-            model.test()
+            model.train(True)
         else:
-            model.train()
+            model.train(False)
     except:
         typ, value, tb = sys.exc_info()
         traceback.print_exc()

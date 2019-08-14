@@ -71,7 +71,7 @@ class GGNN(object):
             os.mkdir(log_dir)
         self.log_file = os.path.join(log_dir, "%s_log.json" % self.run_id)
         self.best_model_file = os.path.join(log_dir, "%s_model_best.pickle" % self.run_id)
-        self.online_data_backup_file = os.path.join(log_dir, "%s_result.txt" % self.run_id)
+        self.online_data_backup_file = os.path.join(log_dir, "%s_result" % self.run_id)
 
         config_file = args.get('--config-file')
         if config_file is not None:
@@ -269,25 +269,13 @@ class GGNN(object):
         instance_per_sec = processed_graphs / (time.time() - start_time)
         return loss, accuracies, precision, recall, f1, instance_per_sec
 
-    def train(self):
+    def train(self, is_test):
         log_to_save = []
         total_time_start = time.time()
         summ_line = '%d\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f'
         
-        bak_train_loss = 0
-        bak_train_accs = 0
-        bak_train_precision = 0
-        bak_train_recall = 0
-        bak_train_f1 = 0
-        bak_train_speed = 0
-
-        bak_valid_loss = 0
-        bak_valid_accs = 0
-        bak_valid_precision = 0
-        bak_valid_recall = 0
-        bak_valid_f1 = 0
-        bak_valid_speed = 0
-        bak_epoch = 0
+        bak_train_data = []
+        bak_valid_data = []
         with self.graph.as_default():
             if self.args.get('--restore') is not None:
                 _, valid_accs, _, _ = self.run_epoch("Resumed (validation)", self.valid_data, False)
@@ -303,10 +291,11 @@ class GGNN(object):
                 print(summ_line%(epoch, self.params['train_file'], train_loss, train_accs, train_precision, train_recall, train_f1, train_speed, epoch_time))
                 print(summ_line%(epoch, self.params['valid_file'], valid_loss, valid_accs, valid_precision, valid_recall, valid_f1, valid_speed, epoch_time))
 
-                bak_epoch = epoch
-                bak_train_loss, bak_train_accs, bak_train_precision, bak_train_recall, bak_train_f1, bak_train_speed = train_loss, train_accs, train_precision, train_recall, train_f1, train_speed
-                bak_valid_loss, bak_valid_accs, bak_valid_precision, bak_valid_recall, bak_valid_f1, bak_valid_speed = valid_loss, valid_accs, valid_precision, valid_recall, valid_f1, valid_speed
+                bak_train_data.append([epoch, self.params['train_file'], train_loss, np.sum(train_accs), np.sum(train_precision), np.sum(train_recall), np.sum(train_f1), train_speed])
+                bak_valid_data.append([epoch, self.params['valid_file'], valid_loss, np.sum(valid_accs), np.sum(valid_precision), np.sum(valid_recall), np.sum(valid_f1), valid_speed])
 
+                if is_test:
+                    break
                 val_acc = np.sum(valid_accs)  # type: float
                 if val_acc > best_val_acc:
                     self.save_model(self.best_model_file)
@@ -320,10 +309,21 @@ class GGNN(object):
                 if  self.params['timeout'] < epoch_time:
                     print("Stopping training after %i epochs timeout." % epoch)
                     break
-        with open(self.online_data_backup_file, "w") as f:
+
+        if is_test:
+            with open(self.online_data_backup_file + "_test.txt", "w") as f:
             f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n")
-            f.write("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(bak_epoch, self.params['train_file'], bak_train_loss, bak_train_accs, bak_train_precision, bak_train_recall, bak_train_f1, bak_train_speed))
-            f.write("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(bak_epoch, self.params['valid_file'], bak_valid_loss, bak_valid_accs, bak_valid_precision, bak_valid_recall, bak_valid_f1, bak_valid_speed))
+            for line in bak_train_data:
+                f.write("\t".join(line) + "\n")
+        else :    
+            with open(self.online_data_backup_file + "_train.txt", "w") as f:
+                f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n")
+                for line in bak_train_data:
+                    f.write("\t".join(line) + "\n")
+            with open(self.online_data_backup_file + "_valid.txt", "w") as f:
+                f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n")
+                for line in bak_valid_data:
+                    f.write("\t".join(line) + "\n")
 
     def test(self):
         with self.graph.as_default():

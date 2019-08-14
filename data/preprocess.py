@@ -6,6 +6,7 @@ import json
 import ast
 import re
 import time
+import math
 from operator import add
 from random import shuffle
 from random import sample
@@ -122,14 +123,21 @@ def split_list(a_list):
     cut = len(a_list)//5
     return a_list[:cut], a_list[cut:]
 
+def chunks(a_list, n):
+    """Yield successive n-sized chunks from l."""
+    sub_len = int(math.ceil(len(a_list) / n))
+    for i in range(0, len(a_list), sub_len):
+        yield a_list[i:i + sub_len]
 
-def process(path, api, pattern, body_api):
+
+def process(top_path, api, pattern, body_api):
     # files = ['correct.txt', 'wrong.txt']
     correct_files = ['11-17correct.txt', '1811-12correct.txt', '18correct.txt']
     wrong_files = ['11-17wrong.txt', '1811-12wrong.txt', '18wrong.txt']
 
     converted_string = []
-    
+    path = top_path + '/FixRuleMiner'
+
     for f in correct_files:
         filtered = filter(os.path.join(path, f), pattern, body_api)
         converted = embedding(filtered)
@@ -144,16 +152,29 @@ def process(path, api, pattern, body_api):
     
     count_wrong = len(converted_string) - count_correct
 
-    for i in range(5):
-        test, train_valid = split_list(converted_string)
-        valid, train = split_list(train_valid)
-        with open(os.path.join(top_path, 'train_{}_{}.json'.format(api, i)), 'w') as f:
-            f.write('[{}]'.format(','.join(train)))
-        with open(os.path.join(top_path, 'valid_{}_{}.json'.format(api, i)), 'w') as f:
-            f.write('[{}]'.format(','.join(valid)))
-        with open(os.path.join(top_path, 'test_{}_{}.json'.format(api, i)), 'w') as f:
-            f.write('[{}]'.format(','.join(test)))
+    test, train = split_list(converted_string)
+    shuffle(train)
+    train_0, train_1, train_2, train_3, train_4 = chunks(train, sub_len)
+    print("  Test : {}".format(len(test)))
+    print("Train0 : {}".format(len(train_0)))
+    print("Train1 : {}".format(len(train_1)))
+    print("Train2 : {}".format(len(train_2)))
+    print("Train3 : {}".format(len(train_3)))
+    print("Train4 : {}".format(len(train_4)))
 
+    write(top_path, api, train_0, train_1+train_2+train_3+train_4, 0)
+    write(top_path, api, train_1, train_0+train_2+train_3+train_4, 1)
+    write(top_path, api, train_2, train_0+train_1+train_3+train_4, 2)
+    write(top_path, api, train_3, train_0+train_1+train_2+train_4, 3)
+    write(top_path, api, train_4, train_0+train_1+train_2+train_3, 4)
+
+
+
+def write_file(top_path, api, valid, train, cross_id):
+    with open(os.path.join(top_path, 'train_{}_{}.json'.format(api, cross_id)), 'w') as f:
+        f.write('[{}]'.format(','.join(train)))
+    with open(os.path.join(top_path, 'valid_{}_{}.json'.format(api, cross_id)), 'w') as f:
+        f.write('[{}]'.format(','.join(valid)))
     with open("data_log.txt", "a") as f:
         f.write('{}\t{}\t{}\t{}\n'.format(time.strftime("%Y-%m-%d-%H-%M-%S"), api, count_correct, count_wrong))
 
@@ -164,12 +185,10 @@ if __name__ == '__main__' :
         pattern = sys.argv[2]
         top_path = './embed/' + sys.argv[1]
         api = sys.argv[1].replace('/', '_')
-        path = top_path + '/FixRuleMiner'
         body_api = False
         if len(sys.argv) >= 4:
             body_api = sys.argv[3]
-
-        process(path, api, pattern, body_api)
+        process(top_path, api, pattern, body_api)
     else :
         with open("patterns.txt", "r") as f:
             for line in f.readlines():
@@ -179,9 +198,8 @@ if __name__ == '__main__' :
                     pattern = args[1]
                     top_path = './embed/' + args[0]
                     api = args[0].replace('/', '_')
-                    path = top_path + '/FixRuleMiner'
                     body_api = False
                     if len(args) >= 3:
                         body_api = args[2]
 
-                    process(path, api, pattern, body_api)
+                    process(top_path, api, pattern, body_api)
