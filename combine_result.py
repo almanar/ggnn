@@ -7,6 +7,7 @@ import sys
 import csv
 
 # train_APIReplacement_Mkdir_0.json_result_valid.txt
+keys = ['loss', 'acc', 'prec', 'recall', 'f1', 'speed']
 
 def parse(f, dic):
 	with open(f, 'r') as f:
@@ -40,23 +41,31 @@ def append(dic, key, value):
 	else :
 		dic[key].append(value)
 
+def compute_best(dic, name):
+	epoch = 0
+	best_avg = 0
+	for key, value in dic[name].items():
+		avg = sum(value) / len(value)
+		if avg > best_avg:
+			epoch = key
+			best_avg = avg
+	return best_avg, epoch
+
 
 if __name__ == '__main__':
 	if len(sys.argv) < 2:
 		print('Please input API path like "APIReplacement/Mkdir"')
 	else:
 		dic = {}
-		dic['loss'] = {}
-		dic['acc'] = {}
-		dic['prec'] = {}
-		dic['recall'] = {}
-		dic['f1'] = {}
-		dic['speed'] = {}
+		for key in keys:
+			dic[key] = {}
 
 		api = sys.argv[1].replace('/', '_')
 		base = os.path.join("./logs", api)
 		for i in range(5):
 			f = os.path.join(base, 'train_{}_{}.json_result_valid.txt'.format(api, i))
 			parse(f, dic)
-		for key, value in dic['acc'].items():
-			print(key, value)
+		with open(os.path.join(base, 'best.txt'), 'w') as f:
+			for key in keys:
+				f.write("Best {} : {}\tEpoch ; {}".format(key, compute_best(dic, key)))
+		

@@ -19,7 +19,7 @@ class GGNN(object):
     @classmethod
     def default_params(cls):
         return {
-            'num_epochs': 500,#3000,
+            'num_epochs': 300,#3000,
             'patience': 100,
             'learning_rate': 0.001,
             'clamp_gradient_norm': 1.0,
@@ -303,9 +303,9 @@ class GGNN(object):
                     print("(Best epoch so far, cum. val. acc increased to %.5f from %.5f. Saving to '%s')" % (val_acc, best_val_acc, self.best_model_file))
                     best_val_acc = val_acc
                     best_val_acc_epoch = epoch
-                elif epoch - best_val_acc_epoch >= self.params['patience']:
-                    print("Stopping training after %i epochs without improvement on validation accuracy." % self.params['patience'])
-                    break
+                # elif epoch - best_val_acc_epoch >= self.params['patience']:
+                #     print("Stopping training after %i epochs without improvement on validation accuracy." % self.params['patience'])
+                #     break
 
                 if  self.params['timeout'] < epoch_time:
                     print("Stopping training after %i epochs timeout." % epoch)
