@@ -312,9 +312,9 @@ class GGNN(object):
 
         if is_test:
             with open(self.online_data_backup_file + "_test.txt", "w") as f:
-            f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n")
-            for line in bak_train_data:
-                f.write("\t".join(line) + "\n")
+                f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n")
+                for line in bak_train_data:
+                    f.write("\t".join(line) + "\n")
         else :    
             with open(self.online_data_backup_file + "_train.txt", "w") as f:
                 f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n")

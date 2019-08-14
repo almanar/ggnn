@@ -159,7 +159,7 @@ def process(top_path, api, pattern, body_api):
     with open(os.path.join(top_path, "train_{}.json".format(api)), 'w') as f:
         f.write('[{}]'.format(','.join(train)))
     with open(os.path.join(top_path, "test_{}.json".format(api)), 'w') as f:
-        f.write('[{}]'.format(','.join(valid)))
+        f.write('[{}]'.format(','.join(test)))
 
     print(" Test : {}".format(len(test)))
     print("Train : {}".format(len(train)))
