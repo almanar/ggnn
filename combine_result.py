@@ -51,17 +51,18 @@ def compute_best(dic, name):
 
 
 if __name__ == '__main__':
-	if len(sys.argv) < 2:
-		print('Please input API path like "APIReplacement/Mkdir"')
+	if len(sys.argv) < 3:
+		print('Please input API path like "APIReplacement Mkdir"')
 	else:
 		dic = {}
 		for key in keys:
 			dic[key] = {}
 
-		api = sys.argv[1].replace('/', '_')
-		base = os.path.join("./logs", api)
+		folder = sys.argv[1]
+		api = sys.argv[2]
+		base = os.path.join(os.path.join("./logs", folder), api)
 		for i in range(5):
-			f = os.path.join(base, 'train_{}_{}.json_result_valid.txt'.format(api, i))
+			f = os.path.join(base, 'train_{}_{}_{}.json_result_valid.txt'.format(folder, api, i))
 			parse(f, dic)
 		with open(os.path.join(base, 'best.txt'), 'w') as f:
 			for key in keys:
