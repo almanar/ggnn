@@ -5,4 +5,4 @@
 # ./run_test.sh splitID dataPointFileName
 
 # For OWASP
-python3 ggnn_sparse.py --predict --data_dir data/embed/APIReplacement/DateGetTime --restore logs/train_$1_undertest.pickle --valid_file $2 --train_file $2
+python3 ggnn_sparse.py --predict --data_dir data/embed/$1/$2 --valid_file test_$1_$2.json --train_file train_$1_$2.json
