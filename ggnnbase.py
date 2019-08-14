@@ -310,20 +310,25 @@ class GGNN(object):
                     print("Stopping training after %i epochs timeout." % epoch)
                     break
 
+        header = "epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n"
         if is_test:
-            with open(self.online_data_backup_file + "_test.txt", "w") as f:
-                f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n")
+            with open(self.online_data_backup_file + "_train_final.txt", "w") as f:
+                f.write(header)
                 for line in bak_train_data:
-                    f.write("\t".join(line) + "\n")
+                    f.write("\t".join([str(item) for item in line]) + "\n")
+            with open(self.online_data_backup_file + "_test.txt", "w") as f:
+                f.write(header)
+                for line in bak_valid_data:
+                    f.write("\t".join([str(item) for item in line]) + "\n")
         else :    
             with open(self.online_data_backup_file + "_train.txt", "w") as f:
-                f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n")
+                f.write(header)
                 for line in bak_train_data:
-                    f.write("\t".join(line) + "\n")
+                    f.write("\t".join([str(item) for item in line]) + "\n")
             with open(self.online_data_backup_file + "_valid.txt", "w") as f:
-                f.write("epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n")
+                f.write(header)
                 for line in bak_valid_data:
-                    f.write("\t".join(line) + "\n")
+                    f.write("\t".join([str(item) for item in line]) + "\n")
 
     def test(self):
         with self.graph.as_default():
