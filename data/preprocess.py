@@ -152,31 +152,36 @@ def process(top_path, api, pattern, body_api):
     
     count_wrong = len(converted_string) - count_correct
 
-    test, train = split_list(converted_string)
-    shuffle(train)
-    train_0, train_1, train_2, train_3, train_4 = chunks(train, sub_len)
-    print("  Test : {}".format(len(test)))
-    print("Train0 : {}".format(len(train_0)))
-    print("Train1 : {}".format(len(train_1)))
-    print("Train2 : {}".format(len(train_2)))
-    print("Train3 : {}".format(len(train_3)))
-    print("Train4 : {}".format(len(train_4)))
+    with open("data_log.txt", "a") as f:
+        f.write('{}\t{}\t{}\t{}\n'.format(time.strftime("%Y-%m-%d-%H-%M-%S"), api, count_correct, count_wrong))
 
-    write(top_path, api, train_0, train_1+train_2+train_3+train_4, 0)
-    write(top_path, api, train_1, train_0+train_2+train_3+train_4, 1)
-    write(top_path, api, train_2, train_0+train_1+train_3+train_4, 2)
-    write(top_path, api, train_3, train_0+train_1+train_2+train_4, 3)
-    write(top_path, api, train_4, train_0+train_1+train_2+train_3, 4)
+    test, train = split_list(converted_string)
+    with open(os.path.join(top_path, "train_{}.json".format(api)), 'w') as f:
+        f.write('[{}]'.format(','.join(train)))
+    with open(os.path.join(top_path, "test_{}.json".format(api)), 'w') as f:
+        f.write('[{}]'.format(','.join(valid)))
+
+    print(" Test : {}".format(len(test)))
+    print("Train : {}".format(len(train)))
+    
+    shuffle(train)
+    length = len(train)
+    sub_len = int(math.ceil(length / 5.0))
+    for i in range(5):
+        l_end = i * sub_len
+        r_start = min(l_end + sub_len, length)
+        write_file(top_path, api, train[l_end:r_start], train[0:l_end] + train[r_start:length], i)
 
 
 
 def write_file(top_path, api, valid, train, cross_id):
-    with open(os.path.join(top_path, 'train_{}_{}.json'.format(api, cross_id)), 'w') as f:
+    # print("Train {}: {}".format(cross_id, len(train)))
+    # print("Valid {}: {}".format(cross_id, len(valid)))
+    with open(os.path.join(top_path, "train_{}_{}.json".format(api, cross_id)), 'w') as f:
         f.write('[{}]'.format(','.join(train)))
-    with open(os.path.join(top_path, 'valid_{}_{}.json'.format(api, cross_id)), 'w') as f:
+    with open(os.path.join(top_path, "valid_{}_{}.json".format(api, cross_id)), 'w') as f:
         f.write('[{}]'.format(','.join(valid)))
-    with open("data_log.txt", "a") as f:
-        f.write('{}\t{}\t{}\t{}\n'.format(time.strftime("%Y-%m-%d-%H-%M-%S"), api, count_correct, count_wrong))
+    
 
 
 if __name__ == '__main__' :
@@ -201,5 +206,4 @@ if __name__ == '__main__' :
                     body_api = False
                     if len(args) >= 3:
                         body_api = args[2]
-
                     process(top_path, api, pattern, body_api)
