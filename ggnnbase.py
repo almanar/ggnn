@@ -58,8 +58,8 @@ class GGNN(object):
         if '--valid_file' in args and args['--valid_file'] is not None:
             params['valid_file'] = args['--valid_file']
         
-        if '--predict' in args:
-            params['predict'] = True
+        if '--predict' in args and args['--predict'] is not None:
+            params['predict'] = args['predict']
 
         log_sub_path = re.sub(r'_\d+', '', params['train_file'].replace('train_', '').replace('.json', ''))
         # if '--random_seed' in args and args['--random_seed'] is not None:
@@ -295,7 +295,7 @@ class GGNN(object):
                 bak_train_data.append([epoch, self.params['train_file'], train_loss, np.sum(train_accs), np.sum(train_precision), np.sum(train_recall), np.sum(train_f1), train_speed])
                 bak_valid_data.append([epoch, self.params['valid_file'], valid_loss, np.sum(valid_accs), np.sum(valid_precision), np.sum(valid_recall), np.sum(valid_f1), valid_speed])
 
-                if not is_test:
+                if is_test == False:
                     val_acc = np.sum(valid_accs)  # type: float
                     if val_acc > best_val_acc:
                         self.save_model(self.best_model_file)
@@ -311,7 +311,7 @@ class GGNN(object):
                     break
 
         header = "epoch\tfile\tloss\taccs\tprecision\trecall\tf1\tspeed\n"
-        if is_test:
+        if is_test == True:
             with open(self.online_data_backup_file + "_train_final.txt", "w") as f:
                 f.write(header)
                 for line in bak_train_data:
