@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
 		folder = sys.argv[1]
 		api = sys.argv[2]
-		base = os.path.join(os.path.join("./logs", folder), api)
+		base = os.path.join("./logs", "{}_{}".format(folder, api))
 		for i in range(5):
 			f = os.path.join(base, 'train_{}_{}_{}.json_result_valid.txt'.format(folder, api, i))
 			parse(f, dic)
