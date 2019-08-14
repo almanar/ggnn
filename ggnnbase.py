@@ -18,7 +18,7 @@ class GGNN(object):
     @classmethod
     def default_params(cls):
         return {
-            'num_epochs': 3000,
+            'num_epochs': 500,#3000,
             'patience': 100,
             'learning_rate': 0.001,
             'clamp_gradient_norm': 1.0,
