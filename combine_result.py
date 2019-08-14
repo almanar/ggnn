@@ -67,5 +67,6 @@ if __name__ == '__main__':
 			parse(f, dic)
 		with open(os.path.join(base, 'best.txt'), 'w') as f:
 			for key in keys:
-				f.write("Best {} : {}\tEpoch ; {}".format(key, compute_best(dic, key)))
+				best, epoch = compute_best(dic, key)
+				f.write("Best {} : {}\tEpoch ; {}".format(key, best, epoch))
 		
