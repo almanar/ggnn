@@ -9,6 +9,7 @@ import json
 import numpy as np
 import pickle
 import random
+import re
 from tensorflow.python import debug as tf_debug
 
 from utils import MLP, ThreadedIterator, SMALL_NUMBER
@@ -60,7 +61,7 @@ class GGNN(object):
         if '--predict' in args:
             params['predict'] = True
 
-        log_sub_path = params['train_file'].replace('train_', '').replace('.json', '')
+        log_sub_path = re.sub(r'_\d+.json', '', params['train_file'].replace('train_', ''))
         # if '--random_seed' in args and args['--random_seed'] is not None:
         #     params['random_seed'] = int(args['--random_seed'])
         
