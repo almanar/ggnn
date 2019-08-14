@@ -66,5 +66,5 @@ if __name__ == '__main__':
 		with open(os.path.join(base, 'best.txt'), 'w') as f:
 			for key in keys:
 				best, epoch = compute_best(dic, key)
-				f.write("Best {} : {}\tEpoch ; {}\n".format(key, best, epoch))
+				f.write("Best {} : {}\tEpoch : {}\n".format(key, best, epoch))
 		
