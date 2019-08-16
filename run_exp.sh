@@ -2,7 +2,7 @@
 
 # ./run_exp.sh APIReplacement Mkdir 0
 
-if [ ! $# == 3 ]; then 
+if [ $# != 3 ]; then 
 	echo "Usage: $0 APIReplacement Mkdir 0"
 	exit
 fi

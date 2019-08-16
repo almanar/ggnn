@@ -4,7 +4,7 @@
 # Usage
 # ./run_test.sh APIReplacement Mkdir
 
-if [ ! $# == 2 ]; then 
+if [ $# != 2 ]; then 
 	echo "Usage: $0 APIReplacement Mkdir"
 	exit
 fi
