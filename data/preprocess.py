@@ -135,27 +135,41 @@ def process(top_path, api, pattern, body_api):
     correct_files = ['11-17correct.txt', '1811-12correct.txt', '18correct.txt']
     wrong_files = ['11-17wrong.txt', '1811-12wrong.txt', '18wrong.txt']
 
-    converted_string = []
+    converted_string_correct = []
     path = top_path + '/FixRuleMiner'
 
     for f in correct_files:
         filtered = filter(os.path.join(path, f), pattern, body_api)
         converted = embedding(filtered)
-        converted_string.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
+        converted_string_correct.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
     
-    count_correct = len(converted_string)
+    count_correct = len(converted_string_correct)
 
+    converted_string_wrong = []
     for f in wrong_files:
         filtered = filter(os.path.join(path, f), pattern, body_api)
         converted = embedding(filtered)
-        converted_string.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
+        converted_string_wrong.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
     
-    count_wrong = len(converted_string) - count_correct
+    count_wrong = len(converted_string_wrong) - count_correct
 
     with open("data_log.txt", "a") as f:
         f.write('{}\t{}\t{}\t{}\n'.format(time.strftime("%Y-%m-%d-%H-%M-%S"), api, count_correct, count_wrong))
 
-    test, train = split_list(converted_string)
+    test1, train1 = split_list(converted_string_correct)
+    test2, train2 = split_list(converted_string_wrong)
+
+    test = []
+    test.extend(test1)
+    test.extend(test2)
+
+    train = []
+    min_len = min(len(train1), len(train2))
+    train1.shuffle()
+    train.extend(train1[0:min_len])
+    train2.shuffle()
+    train.extend(train2[0:min_len])
+
     with open(os.path.join(top_path, "train_{}.json".format(api)), 'w') as f:
         f.write('[{}]'.format(','.join(train)))
     with open(os.path.join(top_path, "test_{}.json".format(api)), 'w') as f:
