@@ -138,6 +138,8 @@ class GGNN(object):
         # Get some common data out:
         num_fwd_edge_types = 0
         for g in data:
+            if len(g['graph']) == 0:
+                continue
             self.max_num_vertices = max(self.max_num_vertices, max([v for e in g['graph'] for v in [int(e[0]), int(e[2])]]))
         #     num_fwd_edge_types = max(num_fwd_edge_types, max([e[1] for e in g['graph']]))
         # max(self.num_edge_types, num_fwd_edge_types * (1 if self.params['tie_fwd_bkwd'] else 2))
