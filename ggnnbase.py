@@ -61,6 +61,9 @@ class GGNN(object):
         if '--predict' in args and args['--predict'] is not None:
             params['predict'] = args['--predict']
 
+        if '--epoch' in args and args['--epoch'] is not None:
+            params['num_epochs'] = int(args['--epoch'])
+
         log_sub_path = re.sub(r'_\d+', '', params['train_file'].replace('train_', '').replace('.json', ''))
         # if '--random_seed' in args and args['--random_seed'] is not None:
         #     params['random_seed'] = int(args['--random_seed'])

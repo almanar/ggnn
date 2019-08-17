@@ -5,6 +5,7 @@ Usage:
 
 Options:
     -h --help                Show this screen.
+    --epoch EPOCH            Training epoch
     --predict                Perform prediction
     --config-file FILE       Hyperparameter configuration file path (in JSON format).
     --config CONFIG          Hyperparameter configuration dictionary (in JSON format).
