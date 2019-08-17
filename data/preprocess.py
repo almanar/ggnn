@@ -55,8 +55,8 @@ def embed_token_list(dic, token_list):
     for token in token_list:
         if token in dic :
             feature_sum = list( map(add, feature_sum, dic[token]) )
-        else :
-            print(token, 'not')
+        # else :
+        #     print(token, 'not')
     if sum(feature_sum) == 0 :
         feature_sum = dic['UNK']
     # print('after', feature_sum)
@@ -151,7 +151,7 @@ def process(top_path, api, pattern, body_api):
         converted = embedding(filtered)
         converted_string_wrong.extend([str(ast.literal_eval(json.dumps(item))).replace("'", "\"") for item in converted])
     
-    count_wrong = len(converted_string_wrong) - count_correct
+    count_wrong = len(converted_string_wrong)
 
     test1, train1 = split_list(converted_string_correct)
     test2, train2 = split_list(converted_string_wrong)
