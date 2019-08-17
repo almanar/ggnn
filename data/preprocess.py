@@ -153,22 +153,29 @@ def process(top_path, api, pattern, body_api):
     
     count_wrong = len(converted_string_wrong) - count_correct
 
-    with open("data_log.txt", "a") as f:
-        f.write('{}\t{}\t{}\t{}\n'.format(time.strftime("%Y-%m-%d-%H-%M-%S"), api, count_correct, count_wrong))
-
     test1, train1 = split_list(converted_string_correct)
     test2, train2 = split_list(converted_string_wrong)
 
+    train = []
+    min_len = min(len(train1), len(train2))
+    shuffle(train1)
+    train.extend(train1[0:min_len])
+    shuffle(train2)
+    train.extend(train2[0:min_len])
+
+    test_size_upd = len(train) // 4
     test = []
     test.extend(test1)
     test.extend(test2)
+    shuffle(test)
+    test = test[0:test_size_upd]
 
-    train = []
-    min_len = min(len(train1), len(train2))
-    train1.shuffle()
-    train.extend(train1[0:min_len])
-    train2.shuffle()
-    train.extend(train2[0:min_len])
+    print('Test Len : {}\tTrain1 Len : {}\tTrain2 Len : {}\tMin : {}'.format(len(test), len(train1), len(train2), min_len))
+    print('Final Train Len : {}\tFinal Test Len : {}'.format(len(train), len(test)))
+
+    with open("data_log.txt", "a") as f:
+        f.write('{}\t{}\t{}\t{}\t{}\t{}\n'.format(time.strftime("%Y-%m-%d-%H-%M-%S"), api, count_correct, count_wrong, len(test), len(train)))
+
 
     with open(os.path.join(top_path, "train_{}.json".format(api)), 'w') as f:
         f.write('[{}]'.format(','.join(train)))
