@@ -28,7 +28,7 @@ def parse(f, dic):
 			append(dic['recall'], epoch, recall)
 
 			f1 = float(row[6])
-			append(dic['f1'], epoch, recall)
+			append(dic['f1'], epoch, f1)
 
 			# speed = float(row[7])
 			
