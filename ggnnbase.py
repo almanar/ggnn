@@ -144,7 +144,7 @@ class GGNN(object):
         #     num_fwd_edge_types = max(num_fwd_edge_types, max([e[1] for e in g['graph']]))
         # max(self.num_edge_types, num_fwd_edge_types * (1 if self.params['tie_fwd_bkwd'] else 2))
         # self.max_num_vertices = 16479
-        self.num_edge_types = 20
+        self.num_edge_types = 33
         self.annotation_size = max(self.annotation_size, len(data[0]["node_features"][0]))
 
         return self.process_raw_graphs(data, is_training_data)
